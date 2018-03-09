@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author: xieyougen
@@ -15,6 +16,16 @@ public class SysRole {
 
     private String name;
 
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
+    private List<SysPermission> permissions;
+
+    public List<SysPermission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<SysPermission> permissions) {
+        this.permissions = permissions;
+    }
 
     public Long getId() {
         return id;

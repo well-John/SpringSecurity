@@ -4,6 +4,7 @@ import com.example.demo.entity.Msg;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
@@ -13,4 +14,11 @@ public class HomeController {
         model.addAttribute("msg", msg);
         return "index";
     }
+
+    @RequestMapping("/admin")
+    @ResponseBody
+    public String hello(){
+        return "hello admin";
+    }
+
 }
