@@ -26,6 +26,15 @@ public class SysPermission {
     //父节点id
     private int pid;
 
+    private String method;
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 
     public Long getId() {
         return id;

@@ -46,7 +46,7 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        if (map == null) {
+        /*if (map == null) {
             loadResource();
         }
         javax.servlet.http.HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
@@ -59,7 +59,7 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
             if(matcher.matches(request)) {
                 return map.get(resUrl);
             }
-        }
+        }*/
         return null;
     }
 

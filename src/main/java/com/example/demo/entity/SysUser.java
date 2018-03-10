@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: xieyougen
@@ -18,7 +19,7 @@ import java.util.List;
  */
 
 @Entity
-public class SysUser implements UserDetails {
+public class SysUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +27,9 @@ public class SysUser implements UserDetails {
     private String username;
     private String password;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<SysRole> roles;
+
 
     public List<SysRole> getRoles() {
         return roles;
@@ -49,45 +51,11 @@ public class SysUser implements UserDetails {
         return username;
     }
 
-    /**
-     * 这四个方法只要有一个值为false，就会登录不了（拦截器会检查这个四个值）
-     * @return
-     */
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        List<SysRole> roles = this.getRoles();
-        roles.stream().forEach(x->authorities.add(new SimpleGrantedAuthority(x.getName())));
-      /*  for (SysRole role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }*/
-        return authorities;
-    }
 
     public String getPassword() {
         return password;

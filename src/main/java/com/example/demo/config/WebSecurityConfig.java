@@ -6,13 +6,20 @@ import com.example.demo.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.DefaultFilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.util.Collection;
+import java.util.LinkedHashMap;
 
 /**
  * @author: xieyougen
@@ -29,6 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomUserService();
     }
 
+    @Bean
+    SecurityMetadataSource securityMetadataSource(){return  new DefaultFilterInvocationSecurityMetadataSource(new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>());}
 
     @Autowired
     private MyFilterSecurityInterceptor myFilterSecurityInterceptor;

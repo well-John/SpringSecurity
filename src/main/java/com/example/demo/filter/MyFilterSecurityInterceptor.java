@@ -5,6 +5,7 @@ import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.DefaultFilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,12 @@ import java.io.IOException;
 @Component
 public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
+
+    //private FilterInvocationSecurityMetadataSource securityMetadataSource;
+
+
     @Autowired
-    private FilterInvocationSecurityMetadataSource securityMetadataSource;
+    private SecurityMetadataSource securityMetadataSource;
 
 
     @Autowired
