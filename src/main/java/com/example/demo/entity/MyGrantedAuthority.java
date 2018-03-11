@@ -2,40 +2,45 @@ package com.example.demo.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by yangyibo on 17/2/15.
  */
 public class MyGrantedAuthority implements GrantedAuthority {
 
-    private String url;
-    private String method;
-    private String authority;
 
+    private List<Authority> authorities;
 
-    public String getPermissionUrl() {
-        return url;
+    private String role;
+
+    public MyGrantedAuthority() {
     }
 
-    public void setPermissionUrl(String permissionUrl) {
-        this.url = permissionUrl;
+    public MyGrantedAuthority(List<Authority> authorities, String role) {
+        this.authorities = authorities;
+        this.role = role;
     }
 
-    public String getMethod() {
-        return method;
+    public List<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
     }
 
-    public MyGrantedAuthority(String url, String method,String authority) {
-        this.url = url;
-        this.method = method;
-        this.authority = authority;
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
     public String getAuthority() {
-        return this.authority;
+        return this.role;
     }
 }

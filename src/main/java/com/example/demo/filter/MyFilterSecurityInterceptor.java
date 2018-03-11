@@ -1,6 +1,7 @@
 package com.example.demo.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -22,17 +23,18 @@ import java.io.IOException;
 public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
 
-    //private FilterInvocationSecurityMetadataSource securityMetadataSource;
+    @Autowired
+    private FilterInvocationSecurityMetadataSource securityMetadataSource;
+
+    @Autowired
+    private MyAccessDecisionManager accessDecisionManager;
 
 
     @Autowired
-    private SecurityMetadataSource securityMetadataSource;
-
-
-    @Autowired
-    public void setAccessDecisionManager(MyAccessDecisionManager myAccessDecisionManager) {
-        super.setAccessDecisionManager(myAccessDecisionManager);
+    public void setAccessDecisionManager() {
+        super.setAccessDecisionManager(this.accessDecisionManager);
     }
+
 
     @Override
     public Class<?> getSecureObjectClass() {

@@ -1,5 +1,6 @@
 package com.example.demo.filter;
 
+import com.example.demo.entity.Authority;
 import com.example.demo.entity.MyGrantedAuthority;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author: xieyougen
@@ -27,20 +29,18 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
 
         HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
-        String method;
-        String url;
         AntPathRequestMatcher matcher;
-        Object p =  authentication.getPrincipal();
+        Object p = authentication.getPrincipal();
         for (GrantedAuthority ga : authentication.getAuthorities()) {
             if (ga instanceof MyGrantedAuthority) {
                 MyGrantedAuthority myGrantedAuthority = (MyGrantedAuthority) ga;
-                String au = myGrantedAuthority.getAuthority();
-                url = myGrantedAuthority.getPermissionUrl();
-                method = myGrantedAuthority.getMethod();
-                matcher = new AntPathRequestMatcher(url);
-                if (matcher.matches(request)) {
-                    if (request.getMethod().equals(method) || "ALL".equals(method)) {
-                        return;
+                List<Authority> authorities = myGrantedAuthority.getAuthorities();
+                for (Authority authority : authorities) {
+                    matcher = new AntPathRequestMatcher(authority.getUrl());
+                    if (matcher.matches(request)) {
+                        if (request.getMethod().equals(authority.getMethod()) || "ALL".equals(authority.getMethod())) {
+                            return;
+                        }
                     }
                 }
             }

@@ -22,4 +22,9 @@ public class HomeController {
         return "hello admin";
     }
 
+    @RequestMapping("/user")
+    @ResponseBody
+    public String user(){
+        return "hello user";
+    }
 }

@@ -1,10 +1,9 @@
 package com.example.demo.Servcie;
 
 import com.example.demo.dao.SysPermissionRepository;
+import com.example.demo.dao.SysRoleRepository;
 import com.example.demo.dao.SysUserRepository;
-import com.example.demo.entity.MyGrantedAuthority;
-import com.example.demo.entity.SysPermission;
-import com.example.demo.entity.SysUser;
+import com.example.demo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,21 +32,29 @@ public class CustomUserService implements UserDetailsService {
     @Autowired
     SysPermissionRepository permissionRepository;
 
+    @Autowired
+    SysRoleRepository roleRepository;
+
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         SysUser sysUser = userRepository.findByUsername(s);
         if (sysUser != null) {
-            List<SysPermission> permissions = permissionRepository.findByAdminUserId(sysUser.getId());
-            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (SysPermission permission :
-                    permissions) {
-                if (permission != null && permission.getName() != null && permission.getUrl() != null) {
-                    MyGrantedAuthority myGrantedAuthority = new MyGrantedAuthority(permission.getUrl(), permission.getMethod(),permission.getName());
-                    grantedAuthorities.add(myGrantedAuthority);
-                }
+            List<SysRole> roles = roleRepository.findRolesByUserId(sysUser.getId());
+            List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+            for (SysRole role : roles) {
+                List<Authority> authorities = new ArrayList<>();
+                List<SysPermission> permissions = permissionRepository.findSysPermissionsByRoleId(role.getId());
+                permissions.forEach(p -> {
+                    if (p != null && p.getUrl() != null && p.getMethod() !=null){
+                        Authority authority = new Authority(p.getUrl(),p.getMethod());
+                        authorities.add(authority);
+                    }
+                });
+                MyGrantedAuthority myGrantedAuthority = new MyGrantedAuthority(authorities,role.getName());
+                grantedAuthorities.add(myGrantedAuthority);
             }
-            return new User(sysUser.getUsername(),sysUser.getPassword(),grantedAuthorities);
+            return new User(sysUser.getUsername(), sysUser.getPassword(), grantedAuthorities);
         } else {
             throw new UsernameNotFoundException("用户不存在");
         }

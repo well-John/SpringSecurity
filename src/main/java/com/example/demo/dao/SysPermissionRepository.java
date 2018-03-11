@@ -22,4 +22,10 @@ public interface SysPermissionRepository extends JpaRepository<SysPermission,Lon
             " left JOIN  sys_role_permissions srp on srp.sys_role_id = r.id" +
             " left JOIN  sys_permission p on srp.permissions_id = p.id where u.id = :userId",nativeQuery = true)
     List<SysPermission> findByAdminUserId(@Param("userId") Long userId);
+
+
+    @Query(value = "select p.* from  sys_role r left join sys_role_permissions srp on r.id = srp.sys_role_id   " +
+            "left join sys_permission p on p.id = srp.permissions_id " +
+            "where r.id =:roleId",nativeQuery = true)
+    List<SysPermission> findSysPermissionsByRoleId(@Param("roleId") Long roleId);
 }

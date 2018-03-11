@@ -36,9 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomUserService();
     }
 
-    @Bean
+    /*@Bean
     SecurityMetadataSource securityMetadataSource(){return  new DefaultFilterInvocationSecurityMetadataSource(new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>());}
-
+*/
     @Autowired
     private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
